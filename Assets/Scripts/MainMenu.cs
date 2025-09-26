@@ -8,15 +8,21 @@ public class MainMenu : MonoBehaviour
 {
     Button play;
     Button exit;
+    Button settings;
+    GameObject panel;
 
     // Start is called before the first frame update
     void Start()
     {
-        play = transform.Find("Panel/Play").GetComponent<Button>();
-        exit = transform.Find("Panel/Exit").GetComponent<Button>();
+        panel = transform.Find("Panel").gameObject;
+        play = panel.transform.Find("Play").GetComponent<Button>();
+        exit = panel.transform.Find("Exit").GetComponent<Button>();
+        settings = panel.transform.Find("Settings").GetComponent<Button>();
+
 
         play.onClick.AddListener(Play);
         exit.onClick.AddListener(Exit);
+        settings.onClick.AddListener(Settings);
     }
 
     void Play()
@@ -26,5 +32,13 @@ public class MainMenu : MonoBehaviour
     void Exit()
     {
         Application.Quit();
+    }
+    void Settings()
+    {
+        panel.SetActive(false);
+    }
+    void Credits()
+    {
+
     }
 }
