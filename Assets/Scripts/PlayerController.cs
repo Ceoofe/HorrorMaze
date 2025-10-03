@@ -6,11 +6,13 @@ public class PlayerController : MonoBehaviour
 {
     public static int health = 100;
     public float speed = 8;
+    public float jump = 5;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
+
     }
 
     // Update is called once per frame
@@ -22,6 +24,9 @@ public class PlayerController : MonoBehaviour
         transform.Translate(Vector3.right * hor * speed * Time.deltaTime);
         transform.Translate(Vector3.forward * ver * speed * Time.deltaTime);
 
-
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            transform.Translate(Vector3.up * jump * Time.deltaTime);
+        }
     }
 }

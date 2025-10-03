@@ -6,39 +6,44 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    Button play;
-    Button exit;
-    Button settings;
-    GameObject panel;
-
+    GameObject display;
+    GameObject graphics;
+    GameObject sounds;
+    GameObject controls;
     // Start is called before the first frame update
     void Start()
     {
-        panel = transform.Find("Panel").gameObject;
-        play = panel.transform.Find("Play").GetComponent<Button>();
-        exit = panel.transform.Find("Exit").GetComponent<Button>();
-        settings = panel.transform.Find("Settings").GetComponent<Button>();
+        Transform panel = transform.Find("SettingsMenu/Panels");
 
-
-        play.onClick.AddListener(Play);
-        exit.onClick.AddListener(Exit);
-        settings.onClick.AddListener(Settings);
+        display = panel.Find("DisplayPanel").gameObject;
+        graphics = panel.Find("GraphicsPanel").gameObject;
+        sounds = panel.Find("SoundsPanel").gameObject;
+        controls = panel.Find("ControlsPanel").gameObject;
     }
 
-    void Play()
+    public void Play()
     {
         SceneManager.LoadScene(1);
+        Time.timeScale = 1f;
     }
-    void Exit()
+    public void Exit()
     {
         Application.Quit();
     }
-    void Settings()
-    {
-        panel.SetActive(false);
-    }
-    void Credits()
+    public void Credits()
     {
 
     }
+
+    public void ShowPanel(GameObject panel)
+    {
+        display.SetActive(false);
+        graphics.SetActive(false);
+        sounds.SetActive(false);
+        controls.SetActive(false);
+
+        panel.SetActive(true);
+    }
+
+
 }
