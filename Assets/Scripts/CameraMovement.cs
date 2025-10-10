@@ -1,29 +1,52 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CameraMovement : MonoBehaviour
 {
-    public float speed = 10f;
-    float xRotation;
-    // Start is called before the first frame update
+    [SerializeField] float rotateSpeed;
+    // [SerializeField] Slider mouseSlider;
+    [SerializeField] Transform player;
+
+    float xRotation = 0f;
+
+    bool isOn;
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        //LoadMouseSensitivity();
     }
 
     // Update is called once per frame
     void Update()
     {
-        float hor = Input.GetAxis("Mouse X");
-        float ver = Input.GetAxis("Mouse Y");
 
-        xRotation += hor * speed;
+        if (Time.timeScale == 0) return;
 
-        
-        transform.Rotate(hor * Vector3.up * speed);
-        transform.Rotate(ver * Vector3.right * speed);
-        
-        
+        float mouseX = Input.GetAxis("Mouse X") * rotateSpeed;
+        float mouseY = Input.GetAxis("Mouse Y") * rotateSpeed;
+
+        xRotation -= mouseY;
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+
+        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        player.Rotate(Vector3.up * mouseX);
     }
+
+    // public void SetMouseSensitivity()
+    // {
+    //     rotateSpeed = mouseSlider.value;
+    //     PlayerPrefs.SetFloat("MouseSensitivity", rotateSpeed);
+    // }
+   
+    // void LoadMouseSensitivity()
+    // {
+    //     if (PlayerPrefs.HasKey("MouseSensitivity"))
+    //     {
+    //         mouseSlider.value = PlayerPrefs.GetFloat("MouseSensitivity");
+    //     }
+    //     SetMouseSensitivity();
+    // }
 }
