@@ -25,19 +25,26 @@ public class MiniMenu : MonoBehaviour
             Time.timeScale = 0f;
             menu.SetActive(true);
             isOn = true;
+            Cursor.lockState = CursorLockMode.None;
+            Debug.Log("Opened");
         }
         else if (Input.GetKeyDown(KeyCode.Escape) && isOn == true)
         {
+            Cursor.lockState = CursorLockMode.Locked;
             Time.timeScale = 1f;
             menu.SetActive(false);
             isOn = false;
+            Debug.Log("Closed");
         }
     }
 
     public void Resume()
     {
+        Debug.Log("Closed");
+        Cursor.lockState = CursorLockMode.Locked;
         Time.timeScale = 1f;
         menu.SetActive(false);
+        isOn = false;
 
     }
 

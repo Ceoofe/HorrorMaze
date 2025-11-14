@@ -24,6 +24,7 @@ public class CameraMovement : MonoBehaviour
     {
 
         if (Time.timeScale == 0) return;
+        if (PlayerController.isCinemaMode) return;
 
         float mouseX = Input.GetAxis("Mouse X") * rotateSpeed;
         float mouseY = Input.GetAxis("Mouse Y") * rotateSpeed;
