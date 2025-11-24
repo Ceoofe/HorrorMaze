@@ -62,7 +62,7 @@ LODGroup:
     renderers:
     - renderer: {fileID: 255450236300034594}
     - renderer: {fileID: 114203745804258415}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!1 &4354031360915590670
 GameObject:
   m_ObjectHideFlags: 0
