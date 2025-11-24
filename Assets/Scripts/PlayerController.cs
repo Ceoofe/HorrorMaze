@@ -5,17 +5,22 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public static int health = 100;
+
     public float speed;
-    public float jump;
+    float highSpeed;
+
+    GameObject cinema;
+    GameObject flashLight;
+    Transform mainCam;
     Rigidbody rb;
-    bool isGrounded = true;
+
     public static bool isCinemaMode = true;
     bool lowFuel = false;
+    bool noFuel = false;
     bool rotateCam = false;
-    GameObject cinema;
-    Transform mainCam;
-    GameObject flashLight;
     bool isOn = false;
+    bool isSprinting = false;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -25,14 +30,21 @@ public class PlayerController : MonoBehaviour
         cinema = GameObject.Find("Canvas/Cinema");
         mainCam = transform.Find("Main Camera");
         flashLight = transform.Find("Main Camera/Spot Light").gameObject;
+        highSpeed = Mathf.Pow(speed, 3);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !isCinemaMode)
+        if (Input.GetKey(KeyCode.LeftShift) && !isCinemaMode) // Sprint
         {
-            rb.AddForce(Vector3.up * jump, ForceMode.Impulse);
+            isSprinting = true;
+            speed = 6;
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift) && !isCinemaMode)
+        {
+            isSprinting = false;
+            speed = 3;
         }
         if (Input.GetKeyDown(KeyCode.F) && !isCinemaMode)
         {
@@ -53,14 +65,24 @@ public class PlayerController : MonoBehaviour
     {
         if (isCinemaMode) // No movement
         {
-            transform.Translate(Vector3.forward * Mathf.Pow(speed, 3) * Time.deltaTime);
-            if (lowFuel)
+            if (noFuel)
             {
-                transform.Translate(Vector3.right * speed * Time.deltaTime);
+                transform.Translate(Vector3.forward * 10 * Time.deltaTime); // Forward
+                transform.Translate(Vector3.right * speed * Time.deltaTime); // Right
+            }
+            else
+            {
+                transform.Translate(Vector3.forward * highSpeed * Time.deltaTime); // Forward
+
+                if (lowFuel)
+                {
+                    highSpeed -= .9f * Time.deltaTime;
+                }
+                Debug.Log(highSpeed); // Remove speed by .5 every second
             }
             if (rotateCam)
             {
-                mainCam.Rotate(0,0,0.1f, Space.World);
+                mainCam.Rotate(0,0,0.1f, Space.World); // Right slant camera
             }
             return;
         }
@@ -72,25 +94,12 @@ public class PlayerController : MonoBehaviour
         transform.Translate(Vector3.forward * ver * speed * Time.deltaTime);
     }
 
-    void OnCollisionEnter(Collision other)
-    {
-        if (other.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = true;
-        }
-    }
-    void OnCollisionExit(Collision other)
-    {
-        if (other.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = false;
-        }
-    }
-
     IEnumerator NoFuel()
     {
-        yield return new WaitForSeconds(18f);
+        yield return new WaitForSeconds(5f);
         lowFuel = true;
+        yield return new WaitForSeconds(18f);
+        noFuel = true;
         yield return new WaitForSeconds(1f);
         rotateCam = true;
         yield return new WaitForSeconds(.5f);
